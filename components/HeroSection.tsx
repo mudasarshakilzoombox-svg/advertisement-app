@@ -1,22 +1,26 @@
-import Link from "next/link";
+import Button from "@/components/Button";
 
 export default function HeroSection() {
   return (
-    <section className="min-h-screen flex flex-col items-center justify-center text-center bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-500 text-white">
-      <h1 className="text-6xl font-extrabold drop-shadow-lg">
-        Advertisements
-      </h1>
+    <section className="min-h-screen flex flex-col items-center justify-center text-center px-6 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-500 text-white">
+      
+      <div className="max-w-3xl mx-auto">
+        
+        <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold drop-shadow-lg leading-tight">
+          Advertisements
+        </h1>
 
-      <p className="mt-6 text-xl text-white/90">
-        Discover and explore all advertisements in one place.
-      </p>
+        <p className="mt-4 sm:mt-6 text-base sm:text-lg md:text-xl text-white/90">
+          Discover and explore all advertisements in one place.
+        </p>
 
-      <Link
-        href="/ads"
-        className="mt-10 bg-purple-900 px-8 py-4 rounded-2xl text-lg font-semibold hover:scale-105 transition"
-      >
-        Open Ads
-      </Link>
+        <div className="mt-8 sm:mt-10">
+          <Button href="/ads">
+            Open Ads
+          </Button>
+        </div>
+
+      </div>
     </section>
   );
 }
