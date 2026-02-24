@@ -1,18 +1,18 @@
-import AdsContainer from "@/components/AdsContainer";
-import { getRandomAds } from "@/utils/ads";
+import { getRandomAds } from "@/lib/ads.service";
+import AdsInfiniteList from "@/components/AdsInfiniteList";
 
 export const dynamic = "force-dynamic";
 
-export default async function AdsPage() {
-  const initialAds = getRandomAds(12);
+export default function AdsPage() {
+  const initialAds = getRandomAds(9);
 
   return (
-    <main className="bg-gray-100 min-h-screen p-12">
-      <h1 className="text-3xl font-bold text-gray-900 mb-8">
+    <main className="bg-gray-100 min-h-screen p-8">
+      <h1 className="text-3xl text-gray-900 font-bold mb-8">
         All Ads
       </h1>
 
-      <AdsContainer initialAds={initialAds} />
+      <AdsInfiniteList initialAds={initialAds} />
     </main>
   );
 }

@@ -1,7 +1,7 @@
 [
   {
     "id": "1",
-    "title": "Properties Item 1",
+    "title": "Properties Item",
     "location": "Islamabad, Pakistan",
     "price": 1416526,
     "condition": "Used",
@@ -9,7 +9,7 @@
   },
   {
     "id": "2",
-    "title": "Laptops Item 2",
+    "title": "Laptops Item",
     "location": "Islamabad, Pakistan",
     "price": 3071390,
     "condition": "New",
@@ -17,7 +17,7 @@
   },
   {
     "id": "3",
-    "title": "Furniture Item 3",
+    "title": "Furniture Item",
     "location": "Islamabad, Pakistan",
     "price": 4200538,
     "condition": "Like New",
@@ -25,7 +25,7 @@
   },
   {
     "id": "4",
-    "title": "Car Item 4",
+    "title": "Car Item",
     "location": "Lahore, Pakistan",
     "price": 2500000,
     "condition": "Used",
@@ -33,7 +33,7 @@
   },
   {
     "id": "5",
-    "title": "Mobile Phone Item 5",
+    "title": "Mobile Phone Item",
     "location": "Karachi, Pakistan",
     "price": 185000,
     "condition": "New",
@@ -41,7 +41,7 @@
   },
   {
     "id": "6",
-    "title": "Bike Item 6",
+    "title": "Bike Item",
     "location": "Rawalpindi, Pakistan",
     "price": 320000,
     "condition": "Used",
@@ -49,7 +49,7 @@
   },
   {
     "id": "7",
-    "title": "TV Item 7",
+    "title": "TV Item",
     "location": "Multan, Pakistan",
     "price": 95000,
     "condition": "Like New",
@@ -57,7 +57,7 @@
   },
   {
     "id": "8",
-    "title": "Office Table Item 8",
+    "title": "Office Table Item",
     "location": "Faisalabad, Pakistan",
     "price": 45000,
     "condition": "Used",
@@ -65,7 +65,7 @@
   },
   {
     "id": "9",
-    "title": "Camera Item 9",
+    "title": "Camera Item",
     "location": "Islamabad, Pakistan",
     "price": 220000,
     "condition": "New",
@@ -73,7 +73,7 @@
   },
   {
     "id": "10",
-    "title": "Gaming PC Item 10",
+    "title": "Gaming PC Item",
     "location": "Lahore, Pakistan",
     "price": 550000,
     "condition": "Like New",

@@ -1,34 +1,20 @@
-"use client";
-
-import { useState } from "react";
-import { Ad } from "@/types/ad";
+import type { Ad } from "@/types/ad";
 import AdCard from "./AdCard.server";
-import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
 
-export default function AdsContainer({
-  initialAds,
-}: {
-  initialAds: Ad[];
-}) {
-  const [ads, setAds] = useState(initialAds);
+type Props = {
+  ads: Ad[];
+};
 
-  const loadMore = async () => {
-    const res = await fetch("/api/ads");
-    const newAds = await res.json();
-    setAds((prev) => [...prev, ...newAds]);
-  };
-
-  const triggerRef = useInfiniteScroll(loadMore);
-
+export default function AdsContainer({ ads }: Props) {
   return (
-    <>
-      <div className="grid gap-8 md:grid-cols-2 xl:grid-cols-3">
-        {ads.map((ad, index) => (
-          <AdCard key={`${ad.id}-${index}`} ad={ad} />
-        ))}
-      </div>
-
-      <div ref={triggerRef} className="h-20" />
-    </>
+    <div className="grid gap-8 md:grid-cols-2 xl:grid-cols-3">
+      {ads.map((ad, index) => (
+        <AdCard
+          key={`${ad.id}-${index}`}
+          ad={ad}
+          index={index}
+        />
+      ))}
+    </div>
   );
 }
