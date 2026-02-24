@@ -1,0 +1,82 @@
+[
+  {
+    "id": "1",
+    "title": "Properties Item 1",
+    "location": "Islamabad, Pakistan",
+    "price": 1416526,
+    "condition": "Used",
+    "image": "https://picsum.photos/600/400?1"
+  },
+  {
+    "id": "2",
+    "title": "Laptops Item 2",
+    "location": "Islamabad, Pakistan",
+    "price": 3071390,
+    "condition": "New",
+    "image": "https://picsum.photos/600/400?2"
+  },
+  {
+    "id": "3",
+    "title": "Furniture Item 3",
+    "location": "Islamabad, Pakistan",
+    "price": 4200538,
+    "condition": "Like New",
+    "image": "https://picsum.photos/600/400?3"
+  },
+  {
+    "id": "4",
+    "title": "Car Item 4",
+    "location": "Lahore, Pakistan",
+    "price": 2500000,
+    "condition": "Used",
+    "image": "https://picsum.photos/600/400?4"
+  },
+  {
+    "id": "5",
+    "title": "Mobile Phone Item 5",
+    "location": "Karachi, Pakistan",
+    "price": 185000,
+    "condition": "New",
+    "image": "https://picsum.photos/600/400?5"
+  },
+  {
+    "id": "6",
+    "title": "Bike Item 6",
+    "location": "Rawalpindi, Pakistan",
+    "price": 320000,
+    "condition": "Used",
+    "image": "https://picsum.photos/600/400?6"
+  },
+  {
+    "id": "7",
+    "title": "TV Item 7",
+    "location": "Multan, Pakistan",
+    "price": 95000,
+    "condition": "Like New",
+    "image": "https://picsum.photos/600/400?7"
+  },
+  {
+    "id": "8",
+    "title": "Office Table Item 8",
+    "location": "Faisalabad, Pakistan",
+    "price": 45000,
+    "condition": "Used",
+    "image": "https://picsum.photos/600/400?8"
+  },
+  {
+    "id": "9",
+    "title": "Camera Item 9",
+    "location": "Islamabad, Pakistan",
+    "price": 220000,
+    "condition": "New",
+    "image": "https://picsum.photos/600/400?9"
+  },
+  {
+    "id": "10",
+    "title": "Gaming PC Item 10",
+    "location": "Lahore, Pakistan",
+    "price": 550000,
+    "condition": "Like New",
+    "image": "https://picsum.photos/600/400?10"
+  }
+]
