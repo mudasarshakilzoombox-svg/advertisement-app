@@ -9,10 +9,6 @@ type UseIntersectionOptions = {
   enabled?: boolean;
 };
 
-/**
- * Reusable Intersection Observer hook
- * Ideal for infinite scroll
- */
 export function useIntersection(
   callback: () => void,
   options?: UseIntersectionOptions
@@ -27,7 +23,6 @@ export function useIntersection(
   const targetRef = useRef<HTMLDivElement | null>(null);
   const callbackRef = useRef(callback);
 
-  // Always keep latest callback
   useEffect(() => {
     callbackRef.current = callback;
   }, [callback]);

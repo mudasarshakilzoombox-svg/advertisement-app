@@ -1,9 +1,6 @@
 import type { Ad } from "@/types/ad";
 import { getAllAds } from "./ads.repository";
 
-/**
- * Fisher–Yates shuffle (correct shuffle)
- */
 function shuffle<T>(array: T[]): T[] {
   const arr = [...array];
 
