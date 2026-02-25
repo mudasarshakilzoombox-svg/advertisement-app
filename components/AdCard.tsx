@@ -1,24 +1,19 @@
-import type { Ad } from "@/types/ad";
+import { AdCardProps } from '@/types/components';
 
-function formatPrice(price: number) {
-  return new Intl.NumberFormat("en-PK").format(price);
+function formatPrice(priceInRupees: number): string {
+  return new Intl.NumberFormat("en-PK").format(priceInRupees);
 }
 
-export default function AdCard({
-  ad,
-  index,
-}: {
-  ad: Ad;
-  index: number;
-}) {
+export default function AdCard({ adDetails }: AdCardProps) {
   return (
     <div className="group bg-white rounded-3xl border border-gray-800 shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden">
 
       <div className="h-[190px] w-full overflow-hidden">
         <img
-          src={ad.image}
-          alt={ad.title}
-          className="w-full h-full object-cover"
+          src={adDetails.image}
+          alt={adDetails.title}
+          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+          loading="lazy"
         />
       </div>
 
@@ -26,20 +21,20 @@ export default function AdCard({
 
         <div className="flex items-start justify-between gap-4">
           <h2 className="text-xl font-semibold text-gray-900 group-hover:text-blue-600 transition-colors duration-300 leading-snug">
-            {ad.title} {index + 1}
+            {adDetails.title}
           </h2>
 
           <span className="ml-3 shrink-0 px-2.5 py-0.5 text-xs font-medium bg-gray-50 border rounded-full text-gray-600">
-            {ad.condition}
+            {adDetails.condition}
           </span>
         </div>
 
         <p className="text-gray-500 mt-3">
-          {ad.location}
+          {adDetails.location}
         </p>
 
         <p className="mt-4 text-xl font-bold text-indigo-600">
-          Rs {formatPrice(ad.price)}
+          Rs {formatPrice(adDetails.price)}
         </p>
 
       </div>
