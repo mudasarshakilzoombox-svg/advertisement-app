@@ -15,7 +15,7 @@ export default function Button({
   className = "",
 }: ButtonProps) {
   const styles =
-    "inline-flex items-center justify-center rounded-2xl px-6 py-3 text-base font-semibold transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-white/50 bg-purple-900 hover:bg-purple-800 hover:scale-105 text-white " +
+    "inline-block px-8 py-4 text-lg font-semibold text-white bg-black/40 rounded-2xl shadow-lg backdrop-blur-md transition-all  hover:bg-black/60 hover:scale-105 " +
     className;
 
   if (href) {

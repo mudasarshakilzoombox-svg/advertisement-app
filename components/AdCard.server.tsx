@@ -12,8 +12,9 @@ export default function AdCard({
   index: number;
 }) {
   return (
-    <div className="bg-white rounded-2xl border shadow-sm hover:shadow-md transition overflow-hidden">
-      <div className="h-60 overflow-hidden">
+    <div className="group bg-white rounded-3xl border border-gray-800 shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden">
+      
+      <div className="h-[190px] w-full overflow-hidden">
         <img
           src={ad.image}
           alt={ad.title}
@@ -22,12 +23,13 @@ export default function AdCard({
       </div>
 
       <div className="p-6">
-        <div className="flex justify-between">
-          <h2 className="text-xl text-gray-900 font-semibold">
+        
+        <div className="flex items-start justify-between gap-4">
+          <h2 className="text-xl font-semibold text-gray-900 group-hover:text-blue-600 transition-colors duration-300 leading-snug">
             {ad.title} {index + 1}
           </h2>
 
-          <span className="px-4 py-1 text-sm border rounded-full text-gray-600">
+          <span className="px-4 py-1 text-sm font-medium border border-gray-300 rounded-full text-gray-600 whitespace-nowrap">
             {ad.condition}
           </span>
         </div>
@@ -39,6 +41,7 @@ export default function AdCard({
         <p className="mt-4 text-xl font-bold text-indigo-600">
           Rs {formatPrice(ad.price)}
         </p>
+
       </div>
     </div>
   );
