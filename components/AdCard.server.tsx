@@ -13,7 +13,7 @@ export default function AdCard({
 }) {
   return (
     <div className="group bg-white rounded-3xl border border-gray-800 shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden">
-      
+
       <div className="h-[190px] w-full overflow-hidden">
         <img
           src={ad.image}
@@ -23,13 +23,13 @@ export default function AdCard({
       </div>
 
       <div className="p-6">
-        
+
         <div className="flex items-start justify-between gap-4">
           <h2 className="text-xl font-semibold text-gray-900 group-hover:text-blue-600 transition-colors duration-300 leading-snug">
             {ad.title} {index + 1}
           </h2>
 
-          <span className="px-4 py-1 text-sm font-medium border border-gray-300 rounded-full text-gray-600 whitespace-nowrap">
+          <span className="ml-3 shrink-0 px-2.5 py-0.5 text-xs font-medium bg-gray-50 border rounded-full text-gray-600">
             {ad.condition}
           </span>
         </div>
