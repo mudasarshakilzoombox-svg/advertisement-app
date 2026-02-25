@@ -1,29 +1,43 @@
 import type { Ad } from "@/types/ad";
 import { getAllAds } from "./ads.repository";
 
-function shuffle<T>(array: T[]): T[] {
-  const arr = [...array];
+function shuffleArray<ItemType>(items: ItemType[]): ItemType[] {
+  const shuffledItems = [...items];
 
-  for (let i = arr.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [arr[i], arr[j]] = [arr[j], arr[i]];
+  for (
+    let currentIndex = shuffledItems.length - 1;
+    currentIndex > 0;
+    currentIndex--
+  ) {
+    const randomIndex = Math.floor(
+      Math.random() * (currentIndex + 1)
+    );
+
+    [
+      shuffledItems[currentIndex],
+      shuffledItems[randomIndex],
+    ] = [
+      shuffledItems[randomIndex],
+      shuffledItems[currentIndex],
+    ];
   }
 
-  return arr;
+  return shuffledItems;
 }
 
 export function getRandomAds(limit: number): Ad[] {
-  const ads = getAllAds();
+  const allAds = getAllAds();
 
-  if (!ads.length) return [];
-
-  const shuffled = shuffle(ads);
-
-  const result: Ad[] = [];
-
-  while (result.length < limit) {
-    result.push(...shuffled);
+  if (allAds.length === 0 || limit <= 0) {
+    return [];
   }
 
-  return result.slice(0, limit);
+  const randomizedAds = shuffleArray(allAds);
+  const selectedAds: Ad[] = [];
+
+  while (selectedAds.length < limit) {
+    selectedAds.push(...randomizedAds);
+  }
+
+  return selectedAds.slice(0, limit);
 }
