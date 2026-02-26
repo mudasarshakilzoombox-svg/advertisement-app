@@ -1,10 +1,10 @@
 import { cache } from 'react';
 import adsData from "@/public/ads.json";
-import { Ad } from "@/types/ad";
+import type { Ad } from "@/types/ad";
 import { GetRandomAdsReturn } from "@/types/services";
 
 const allAvailableAds: Ad[] = adsData as Ad[];
-const MAXIMUM_ADS_TO_DISPLAY = 190;
+export const MAXIMUM_ADS_TO_DISPLAY = 190; // Add export keyword
 
 export const getRandomizedIndices = cache((): number[] => {
   console.log("Generating random indices on server...");

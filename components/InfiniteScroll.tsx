@@ -27,13 +27,17 @@ export default function InfiniteScrollClient(props: InfiniteScrollClientProps) {
 
       <div className="mt-8">
         {hasMore && loadedCount < totalAdsCount && (
-          <div ref={loadMoreRef} className="h-10" />
+          <div ref={loadMoreRef} className="h-20 flex items-center justify-center">
+            {!isLoading && (
+              <span className="text-gray-400 text-sm">Scroll for more</span>
+            )}
+          </div>
         )}
         
         {isLoading && (
           <div className="flex flex-col items-center justify-center py-8">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div>
-            <span className="ml-3 text-gray-600 mt-2">
+            <span className="text-gray-600 mt-2">
               Loading more ads... ({loadedCount} of {totalAdsCount})
             </span>
           </div>
@@ -52,11 +56,10 @@ export default function InfiniteScrollClient(props: InfiniteScrollClientProps) {
         )}
         
         {!hasMore && !isLoading && loadedCount >= totalAdsCount && (
-          
               <p className="text-gray-800 text-center py-4">
                 No more ads
               </p>
-          
+
         )}
       </div>
     </>

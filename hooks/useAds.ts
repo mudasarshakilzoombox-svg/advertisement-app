@@ -41,12 +41,11 @@ export function useAds({
 
     if (!state.nextBatch.length) {
       dispatch({ 
-        type: 'LOAD_MORE_SUCCESS', 
+        type: 'UPDATE_NEXT_BATCH', 
         payload: { 
-          newAds: [], 
           nextBatch: [], 
           nextBatchNumber: state.currentBatchNumber, 
-          hasMore: false 
+          hasMore: false
         }
       });
       hasMoreRef.current = false;
@@ -57,34 +56,47 @@ export function useAds({
     dispatch({ type: 'LOAD_MORE_START' });
 
     try {
-      const validNextAds = state.nextBatch.filter((ad: Ad): ad is Ad => {
-        return ad !== null && ad !== undefined && typeof ad.id === 'string';
-      });
+      const validNextAds = state.nextBatch.filter((ad): ad is Ad => 
+        Boolean(ad && ad.id)
+      );
       
       if (state.loadedCount + validNextAds.length >= totalAdsCount) {
         dispatch({
           type: 'LOAD_MORE_SUCCESS',
           payload: {
-            newAds: validNextAds,
-            nextBatch: [],
-            nextBatchNumber: state.currentBatchNumber + 1,
-            hasMore: false 
+            newAds: validNextAds
           }
         });
+        
+        dispatch({
+          type: 'UPDATE_NEXT_BATCH',
+          payload: {
+            nextBatch: [],
+            nextBatchNumber: state.currentBatchNumber + 1,
+            hasMore: false
+          }
+        });
+        
         hasMoreRef.current = false;
         isLoadingRef.current = false;
         return;
       }
 
-      const result = await fetchMoreAds(state.currentBatchNumber, adsPerBatch);
-      
       dispatch({
         type: 'LOAD_MORE_SUCCESS',
         payload: {
-          newAds: validNextAds,
+          newAds: validNextAds
+        }
+      });
+
+      const result = await fetchMoreAds(state.currentBatchNumber, adsPerBatch);
+      
+      dispatch({
+        type: 'UPDATE_NEXT_BATCH',
+        payload: {
           nextBatch: result.ads,
           nextBatchNumber: result.nextBatchNumber,
-          hasMore: result.hasMore 
+          hasMore: result.hasMore
         }
       });
       

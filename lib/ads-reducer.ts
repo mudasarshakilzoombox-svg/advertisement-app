@@ -31,19 +31,24 @@ export function adsReducer(state: AdsState, action: AdsAction): AdsState {
       return {
         ...state,
         allAds: [...state.allAds, ...action.payload.newAds],
-        nextBatch: action.payload.nextBatch,
-        currentBatchNumber: action.payload.nextBatchNumber,
         loadedCount: state.loadedCount + action.payload.newAds.length,
-        hasMore: action.payload.hasMore, 
         isLoading: false,
         error: null
+      };
+
+    case 'UPDATE_NEXT_BATCH':
+      return {
+        ...state,
+        nextBatch: action.payload.nextBatch,
+        currentBatchNumber: action.payload.nextBatchNumber,
+        hasMore: action.payload.hasMore
       };
 
     case 'LOAD_MORE_ERROR':
       return {
         ...state,
         isLoading: false,
-        error: action.payload.error 
+        error: action.payload.error
       };
 
     case 'RESET_STATE':
