@@ -1,75 +1,31 @@
 'use client';
 
-import { useState, useRef, useCallback, useEffect } from 'react';
-import { useInView } from 'react-intersection-observer';
-import { fetchMoreAds } from '@/actions/ads';
 import AdsContainer from './AdsContainer';
-import { Ad } from '@/types/ad';
+import { useAds } from '@/hooks/useAds';
 import { InfiniteScrollClientProps } from '@/types/components';
 
-export default function InfiniteScrollClient({
-  preFetchedNextBatch,
-  nextBatchNumber,
-  totalAdsCount,
-  initialLoadedCount,
-  adsPerBatch
-}: InfiniteScrollClientProps) {
-  const [allAds, setAllAds] = useState<Ad[]>([]);
-  const [nextBatch, setNextBatch] = useState<Ad[]>(preFetchedNextBatch);
-  const [currentBatchNumber, setCurrentBatchNumber] = useState(nextBatchNumber);
-  const [loadedCount, setLoadedCount] = useState(initialLoadedCount);
-  const [isLoading, setIsLoading] = useState(false);
-  const [hasMore, setHasMore] = useState(true);
-  
-  const { ref: loadMoreRef, inView } = useInView({
-    threshold: 0,
-    rootMargin: '200px'
-  });
+export default function InfiniteScrollClient(props: InfiniteScrollClientProps) {
+  const {
+    allAds,
+    isLoading,
+    hasMore,
+    error,
+    loadedCount,
+    loadMoreRef,
+    retry
+  } = useAds(props);
 
-  const loadMoreAds = useCallback(async () => {
-    if (isLoading || !hasMore || loadedCount >= totalAdsCount) return;
-    if (!nextBatch.length) {
-      setHasMore(false);
-      return;
-    }
-
-    setIsLoading(true);
-    
-    try {
-      const validNextAds = nextBatch.filter((ad: Ad) => ad && ad.id);
-      setAllAds((prev: Ad[]) => [...prev, ...validNextAds]);
-      
-      const newLoadedCount = loadedCount + validNextAds.length;
-      setLoadedCount(newLoadedCount);
-
-      if (newLoadedCount >= totalAdsCount) {
-        setHasMore(false);
-        setIsLoading(false);
-        return;
-      }
-
-      const result = await fetchMoreAds(currentBatchNumber, adsPerBatch);
-      
-      setNextBatch(result.ads);
-      setCurrentBatchNumber(result.nextBatchNumber);
-      setHasMore(result.hasMore);
-      
-    } catch (error) {
-      console.error('Error loading more ads:', error);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [isLoading, hasMore, loadedCount, totalAdsCount, nextBatch, currentBatchNumber, adsPerBatch]);
-
-  useEffect(() => {
-    if (inView && !isLoading && hasMore && loadedCount < totalAdsCount) {
-      loadMoreAds();
-    }
-  }, [inView, isLoading, hasMore, loadedCount, totalAdsCount, loadMoreAds]);
+  const { totalAdsCount } = props;
 
   return (
     <>
-      {allAds.length > 0 && <AdsContainer adsList={allAds} />}
+      {allAds.length > 0 && (
+        <>         
+          <div className="mt-8">
+            <AdsContainer adsList={allAds} />
+          </div>
+        </>
+      )}
 
       <div className="mt-8">
         {hasMore && loadedCount < totalAdsCount && (
@@ -77,18 +33,32 @@ export default function InfiniteScrollClient({
         )}
         
         {isLoading && (
-          <div className="flex justify-center items-center py-8">
+          <div className="flex flex-col items-center justify-center py-8">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div>
-            <span className="ml-3 text-gray-600">
+            <span className="ml-3 text-gray-600 mt-2">
               Loading more ads... ({loadedCount} of {totalAdsCount})
             </span>
           </div>
         )}
         
+        {error && (
+          <div className="text-center py-8">
+            <p className="text-red-600 mb-4">{error}</p>
+            <button
+              onClick={retry}
+              className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
+            >
+              Try Again
+            </button>
+          </div>
+        )}
+        
         {!hasMore && !isLoading && loadedCount >= totalAdsCount && (
-          <p className="text-gray-800 text-center py-8">
-            No more ads to load at the moment.
-          </p>
+          
+              <p className="text-gray-800 text-center py-4">
+                No more ads
+              </p>
+          
         )}
       </div>
     </>
