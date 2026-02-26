@@ -1,4 +1,3 @@
-// components/InfiniteScrollClient.tsx
 'use client';
 
 import AdsContainer from './AdsContainer';
@@ -20,7 +19,6 @@ export default function InfiniteScrollClient(props: InfiniteScrollClientProps) {
 
   return (
     <>
-      {/* Dynamically loaded ads with spacing */}
       {allAds.length > 0 && (
         <div className="mt-8">
           <AdsContainer adsList={allAds} />
@@ -28,12 +26,10 @@ export default function InfiniteScrollClient(props: InfiniteScrollClientProps) {
       )}
 
       <div className="mt-8">
-        {/* Scroll trigger element */}
         {hasMore && loadedCount < totalAdsCount && (
           <div ref={loadMoreRef} className="h-10" />
         )}
         
-        {/* Loading state */}
         {isLoading && (
           <div className="flex flex-col items-center justify-center py-8">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div>
@@ -43,7 +39,6 @@ export default function InfiniteScrollClient(props: InfiniteScrollClientProps) {
           </div>
         )}
         
-        {/* Error state with retry */}
         {error && (
           <div className="text-center py-8">
             <p className="text-red-600 mb-4">{error}</p>
@@ -58,7 +53,7 @@ export default function InfiniteScrollClient(props: InfiniteScrollClientProps) {
         
         {!hasMore && !isLoading && loadedCount >= totalAdsCount && (
           
-              <p className="text-gray-800">
+              <p className="text-gray-800 text-center py-4">
                 No more ads
               </p>
           
