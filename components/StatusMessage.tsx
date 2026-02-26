@@ -10,8 +10,8 @@ export default function StatusMessage({
   if (type === 'scroll') {
     return (
       <div className="h-16 flex items-center justify-center">
-        <span className="text-gray-400 text-sm animate-pulse">
-          ↓ Scroll for more ads
+        <span className="text-gray-600 text-sm animate-pulse">
+          Loading for more ads...
         </span>
       </div>
     );
