@@ -34,7 +34,7 @@ export function adsReducer(state: AdsState, action: AdsAction): AdsState {
         nextBatch: action.payload.nextBatch,
         currentBatchNumber: action.payload.nextBatchNumber,
         loadedCount: state.loadedCount + action.payload.newAds.length,
-        hasMore: action.payload.hasMore,
+        hasMore: action.payload.hasMore, 
         isLoading: false,
         error: null
       };
@@ -43,7 +43,7 @@ export function adsReducer(state: AdsState, action: AdsAction): AdsState {
       return {
         ...state,
         isLoading: false,
-        error: action.payload.error
+        error: action.payload.error 
       };
 
     case 'RESET_STATE':

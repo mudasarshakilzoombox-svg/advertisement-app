@@ -5,14 +5,7 @@ import { useInView } from 'react-intersection-observer';
 import { fetchMoreAds } from '@/actions/ads';
 import { adsReducer, initialAdsState } from '@/lib/ads-reducer';
 import { Ad } from '@/types/ad';
-
-type UseAdsProps = {
-  preFetchedNextBatch: Ad[];
-  nextBatchNumber: number;
-  totalAdsCount: number;
-  initialLoadedCount: number;
-  adsPerBatch: number;
-};
+import { UseAdsProps, UseAdsReturn } from '@/types/hooks';
 
 export function useAds({
   preFetchedNextBatch,
@@ -20,11 +13,11 @@ export function useAds({
   totalAdsCount,
   initialLoadedCount,
   adsPerBatch
-}: UseAdsProps) {
+}: UseAdsProps): UseAdsReturn {
   const [state, dispatch] = useReducer(adsReducer, initialAdsState);
   
-  const isLoadingRef = useRef(false);
-  const hasMoreRef = useRef(true);
+  const isLoadingRef = useRef<boolean>(false);
+  const hasMoreRef = useRef<boolean>(true);
   const { ref: loadMoreRef, inView } = useInView({
     threshold: 0,
     rootMargin: '200px'
@@ -41,18 +34,21 @@ export function useAds({
     });
   }, [preFetchedNextBatch, nextBatchNumber, initialLoadedCount]);
 
-  const loadMoreAds = useCallback(async () => {
+  const loadMoreAds = useCallback(async (): Promise<void> => {
     if (isLoadingRef.current || !hasMoreRef.current || state.loadedCount >= totalAdsCount) {
       return;
     }
 
     if (!state.nextBatch.length) {
-      dispatch({ type: 'LOAD_MORE_SUCCESS', payload: { 
-        newAds: [], 
-        nextBatch: [], 
-        nextBatchNumber: state.currentBatchNumber, 
-        hasMore: false 
-      }});
+      dispatch({ 
+        type: 'LOAD_MORE_SUCCESS', 
+        payload: { 
+          newAds: [], 
+          nextBatch: [], 
+          nextBatchNumber: state.currentBatchNumber, 
+          hasMore: false 
+        }
+      });
       hasMoreRef.current = false;
       return;
     }
@@ -61,7 +57,9 @@ export function useAds({
     dispatch({ type: 'LOAD_MORE_START' });
 
     try {
-      const validNextAds = state.nextBatch.filter((ad: Ad) => ad && ad.id);
+      const validNextAds = state.nextBatch.filter((ad: Ad): ad is Ad => {
+        return ad !== null && ad !== undefined && typeof ad.id === 'string';
+      });
       
       if (state.loadedCount + validNextAds.length >= totalAdsCount) {
         dispatch({
@@ -70,7 +68,7 @@ export function useAds({
             newAds: validNextAds,
             nextBatch: [],
             nextBatchNumber: state.currentBatchNumber + 1,
-            hasMore: false
+            hasMore: false 
           }
         });
         hasMoreRef.current = false;
@@ -86,7 +84,7 @@ export function useAds({
           newAds: validNextAds,
           nextBatch: result.ads,
           nextBatchNumber: result.nextBatchNumber,
-          hasMore: result.hasMore
+          hasMore: result.hasMore 
         }
       });
       
@@ -110,7 +108,13 @@ export function useAds({
   }, [inView, state.isLoading, state.hasMore, state.loadedCount, totalAdsCount, loadMoreAds]);
 
   return {
-    ...state,
+    allAds: state.allAds,
+    nextBatch: state.nextBatch,
+    currentBatchNumber: state.currentBatchNumber,
+    loadedCount: state.loadedCount,
+    isLoading: state.isLoading,
+    hasMore: state.hasMore,
+    error: state.error,
     loadMoreRef,
     retry: loadMoreAds
   };
