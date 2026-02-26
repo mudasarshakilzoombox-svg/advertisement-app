@@ -19,7 +19,7 @@ export default function AdsContainer({ adsList }: Props) {
   }
 
   return (
-    <div className="grid gap-8 md:grid-cols-2 xl:grid-cols-3">
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-y-6 gap-x-6 md:grid-cols-2 xl:grid-cols-3">
       {validAds.map((ad, index) => (
         <AdCard
           key={`${ad.id}-${index}-${Math.random().toString(36).substr(2, 9)}`}

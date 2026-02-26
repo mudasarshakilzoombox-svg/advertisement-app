@@ -23,7 +23,7 @@ export default async function AdsPage() {
           </h1>
           
         </div>
-
+        
         <AdsContainer adsList={firstBatchAds} />
 
         <InfiniteScrollClient 
