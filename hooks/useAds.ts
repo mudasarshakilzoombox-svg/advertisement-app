@@ -1,24 +1,26 @@
 'use client';
 
-import { useReducer, useCallback, useEffect } from 'react';
+import { useReducer, useCallback, useEffect, useRef } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { fetchMoreAds } from '@/actions/ads';
 import { adsReducer, initialAdsState } from '@/lib/ads-reducer';
-import type { Ad } from '@/types/ad';
-import type { UseAdsProps, UseAdsReturn } from '@/types/hooks';
+import { Ad } from '@/types/ad';
+import { UseAdsProps, UseAdsReturn } from '@/types/hooks';
 
 export function useAds({
   preFetchedNextBatch,
   nextBatchNumber,
   totalAdsCount,
   initialLoadedCount,
-  adsPerBatch,
+  adsPerBatch
 }: UseAdsProps): UseAdsReturn {
   const [state, dispatch] = useReducer(adsReducer, initialAdsState);
-
+  
+  const isLoadingRef = useRef<boolean>(false);
+  const hasMoreRef = useRef<boolean>(true);
   const { ref: loadMoreRef, inView } = useInView({
     threshold: 0,
-    rootMargin: '200px',
+    rootMargin: '200px'
   });
 
   useEffect(() => {
@@ -27,107 +29,95 @@ export function useAds({
       payload: {
         nextBatch: preFetchedNextBatch,
         nextBatchNumber,
-        initialLoadedCount,
-      },
+        initialLoadedCount
+      }
     });
   }, [preFetchedNextBatch, nextBatchNumber, initialLoadedCount]);
 
   const loadMoreAds = useCallback(async (): Promise<void> => {
-    if (
-      state.isLoading ||
-      !state.hasMore ||
-      state.loadedCount >= totalAdsCount
-    ) {
+    if (isLoadingRef.current || !hasMoreRef.current || state.loadedCount >= totalAdsCount) {
       return;
     }
 
     if (!state.nextBatch.length) {
-      dispatch({
-        type: 'UPDATE_NEXT_BATCH',
-        payload: {
-          nextBatch: [],
-          nextBatchNumber: state.currentBatchNumber,
-          hasMore: false,
-        },
+      dispatch({ 
+        type: 'UPDATE_NEXT_BATCH', 
+        payload: { 
+          nextBatch: [], 
+          nextBatchNumber: state.currentBatchNumber, 
+          hasMore: false
+        }
       });
+      hasMoreRef.current = false;
       return;
     }
 
+    isLoadingRef.current = true;
     dispatch({ type: 'LOAD_MORE_START' });
 
     try {
-      const validNextAds = state.nextBatch.filter(
-        (ad): ad is Ad => Boolean(ad && ad.id)
+      const validNextAds = state.nextBatch.filter((ad): ad is Ad => 
+        Boolean(ad && ad.id)
       );
-
-      dispatch({
-        type: 'LOAD_MORE_SUCCESS',
-        payload: {
-          newAds: validNextAds,
-        },
-      });
-
+      
       if (state.loadedCount + validNextAds.length >= totalAdsCount) {
+        dispatch({
+          type: 'LOAD_MORE_SUCCESS',
+          payload: {
+            newAds: validNextAds
+          }
+        });
+        
         dispatch({
           type: 'UPDATE_NEXT_BATCH',
           payload: {
             nextBatch: [],
             nextBatchNumber: state.currentBatchNumber + 1,
-            hasMore: false,
-          },
+            hasMore: false
+          }
         });
+        
+        hasMoreRef.current = false;
+        isLoadingRef.current = false;
         return;
       }
 
-      const result = await fetchMoreAds(
-        state.currentBatchNumber,
-        adsPerBatch
-      );
+      dispatch({
+        type: 'LOAD_MORE_SUCCESS',
+        payload: {
+          newAds: validNextAds
+        }
+      });
 
+      const result = await fetchMoreAds(state.currentBatchNumber, adsPerBatch);
+      
       dispatch({
         type: 'UPDATE_NEXT_BATCH',
         payload: {
           nextBatch: result.ads,
           nextBatchNumber: result.nextBatchNumber,
-          hasMore: result.hasMore,
-        },
+          hasMore: result.hasMore
+        }
       });
-
+      
+      hasMoreRef.current = result.hasMore;
+      
     } catch (error) {
+      console.error('Error loading more ads:', error);
       dispatch({
         type: 'LOAD_MORE_ERROR',
-        payload: {
-          error: 'Failed to load more ads. Please try again.',
-        },
+        payload: { error: 'Failed to load more ads. Please try again.' }
       });
+    } finally {
+      isLoadingRef.current = false;
     }
-  }, [
-    state.isLoading,
-    state.hasMore,
-    state.nextBatch,
-    state.loadedCount,
-    state.currentBatchNumber,
-    totalAdsCount,
-    adsPerBatch,
-  ]);
+  }, [state.nextBatch, state.loadedCount, state.currentBatchNumber, totalAdsCount, adsPerBatch]);
 
   useEffect(() => {
-    if (
-      inView &&
-      !state.isLoading &&
-      state.hasMore &&
-      state.loadedCount < totalAdsCount
-    ) {
+    if (inView && !state.isLoading && state.hasMore && state.loadedCount < totalAdsCount) {
       loadMoreAds();
     }
-  }, [
-    inView,
-    state.isLoading,
-    state.hasMore,
-    state.loadedCount,
-    totalAdsCount,
-    loadMoreAds,
-  ]);
+  }, [inView, state.isLoading, state.hasMore, state.loadedCount, totalAdsCount, loadMoreAds]);
 
   return {
     allAds: state.allAds,
@@ -138,6 +128,6 @@ export function useAds({
     hasMore: state.hasMore,
     error: state.error,
     loadMoreRef,
-    retry: loadMoreAds,
+    retry: loadMoreAds
   };
 }
