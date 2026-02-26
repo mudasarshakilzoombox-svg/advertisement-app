@@ -7,7 +7,6 @@ const allAvailableAds: Ad[] = adsData as Ad[];
 export const MAXIMUM_ADS_TO_DISPLAY = 190; 
 
 export const getRandomizedIndices = cache((): number[] => {
-  console.log("Generating random indices on server...");
   
   const indices = Array.from({ length: MAXIMUM_ADS_TO_DISPLAY }, (_, index) => index);
   
@@ -28,8 +27,6 @@ export async function getRandomAdsBatch(
   const startIndex = (batchNumber - 1) * adsPerBatch;
   const endIndex = Math.min(startIndex + adsPerBatch, MAXIMUM_ADS_TO_DISPLAY);
   
-  console.log(`Server: Fetching batch ${batchNumber} (indices ${startIndex}-${endIndex})`);
-  
   if (startIndex >= MAXIMUM_ADS_TO_DISPLAY) {
     return [];
   }
@@ -44,8 +41,6 @@ export function getRandomAds(limit: number, page: number = 1): GetRandomAdsRetur
   const randomizedIndices = getRandomizedIndices();
   const startIndex = (page - 1) * limit;
   const endIndex = Math.min(startIndex + limit, MAXIMUM_ADS_TO_DISPLAY);
-  
-  console.log(`getRandomAds: Page ${page}, Start: ${startIndex}, End: ${endIndex}`);
   
   if (startIndex >= MAXIMUM_ADS_TO_DISPLAY) {
     return { 

@@ -1,4 +1,4 @@
-import { AdsState, AdsAction } from '@/types/ads-state';
+import type { AdsState, AdsAction } from '@/types/ads-state';
 
 export const initialAdsState: AdsState = {
   allAds: [],
@@ -7,33 +7,37 @@ export const initialAdsState: AdsState = {
   loadedCount: 0,
   isLoading: false,
   hasMore: true,
-  error: null
+  error: null,
 };
 
-export function adsReducer(state: AdsState, action: AdsAction): AdsState {
+export function adsReducer(
+  state: AdsState,
+  action: AdsAction
+): AdsState {
   switch (action.type) {
     case 'SET_INITIAL_STATE':
       return {
         ...state,
         nextBatch: action.payload.nextBatch,
         currentBatchNumber: action.payload.nextBatchNumber,
-        loadedCount: action.payload.initialLoadedCount
+        loadedCount: action.payload.initialLoadedCount,
       };
 
     case 'LOAD_MORE_START':
       return {
         ...state,
         isLoading: true,
-        error: null
+        error: null,
       };
 
     case 'LOAD_MORE_SUCCESS':
       return {
         ...state,
         allAds: [...state.allAds, ...action.payload.newAds],
-        loadedCount: state.loadedCount + action.payload.newAds.length,
+        loadedCount:
+          state.loadedCount + action.payload.newAds.length,
         isLoading: false,
-        error: null
+        error: null,
       };
 
     case 'UPDATE_NEXT_BATCH':
@@ -41,14 +45,14 @@ export function adsReducer(state: AdsState, action: AdsAction): AdsState {
         ...state,
         nextBatch: action.payload.nextBatch,
         currentBatchNumber: action.payload.nextBatchNumber,
-        hasMore: action.payload.hasMore
+        hasMore: action.payload.hasMore,
       };
 
     case 'LOAD_MORE_ERROR':
       return {
         ...state,
         isLoading: false,
-        error: action.payload.error
+        error: action.payload.error,
       };
 
     case 'RESET_STATE':

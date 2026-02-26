@@ -16,8 +16,6 @@ export async function fetchMoreAds(
   adsPerBatch: FetchMoreAdsParams["adsPerBatch"]
 ): Promise<FetchMoreAdsResponse> {
   try {
-    console.log(`Server Action: Fetching batch ${batchNumber}`);
-    
     const nextBatchAds = await getRandomAdsBatch(batchNumber, adsPerBatch);
     const moreAvailable = await hasMoreBatches(batchNumber, adsPerBatch);
     const totalLoadedSoFar = batchNumber * adsPerBatch;

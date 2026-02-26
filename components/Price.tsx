@@ -1,8 +1,5 @@
 import type { PriceProps } from "@/types/price";
-
-function formatPrice(amount: number): string {
-  return new Intl.NumberFormat("en-PK").format(amount);
-}
+import { formatPrice } from "@/utils/common/formatPrice";
 
 export default function Price({
   amount,
