@@ -4,7 +4,7 @@ import type { Ad } from "@/types/ad";
 import { GetRandomAdsReturn } from "@/types/services";
 
 const allAvailableAds: Ad[] = adsData as Ad[];
-export const MAXIMUM_ADS_TO_DISPLAY = 190; // Add export keyword
+export const MAXIMUM_ADS_TO_DISPLAY = 190; 
 
 export const getRandomizedIndices = cache((): number[] => {
   console.log("Generating random indices on server...");
