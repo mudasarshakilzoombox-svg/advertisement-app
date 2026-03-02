@@ -20,11 +20,7 @@ export default function InfiniteScrollClient(props: InfiniteScrollClientProps) {
 
   return (
     <>
-      {allAds.length > 0 && (
-        <div className="mt-5">
-          <AdsContainer adsList={allAds} />
-        </div>
-      )}
+      <AdsContainer adsList={allAds} />
 
       <div className="mt-12">
         {hasMore && loadedCount < totalAdsCount && !isLoading && (
