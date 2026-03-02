@@ -1,4 +1,3 @@
-// types/components.ts
 import { Ad } from './ad';
 
 export type InfiniteScrollClientProps = {

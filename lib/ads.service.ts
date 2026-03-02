@@ -1,29 +1,22 @@
 import { cache } from 'react';
 import adsData from "@/public/ads.json";
-import type { Ad } from "@/types/ad";
-import { GetRandomAdsReturn } from "@/types/services";
+import type { Ad } from "@/src/types/ad";
+import { GetAdsReturn } from "@/src/types/services";
+import { ADS_PER_BATCH, TOTAL_ADS_AVAILABLE, MAX_BATCHES } from "@/config/ads.config";
 
 const allAvailableAds: Ad[] = adsData as Ad[];
-export const MAXIMUM_ADS_TO_DISPLAY = 190; 
 
-export const getRandomizedIndices = cache((): number[] => {
-  
-  const indices = Array.from({ length: MAXIMUM_ADS_TO_DISPLAY }, (_, index) => index);
-  
-  for (let currentIndex = indices.length - 1; currentIndex > 0; currentIndex--) {
-    const randomIndex = Math.floor(Math.random() * (currentIndex + 1));
-    [indices[currentIndex], indices[randomIndex]] = 
-    [indices[randomIndex], indices[currentIndex]];
-  }
-  
-  return indices;
+export const MAXIMUM_ADS_TO_DISPLAY = TOTAL_ADS_AVAILABLE;
+
+export const getSequentialIndices = cache((): number[] => {
+  return Array.from({ length: MAXIMUM_ADS_TO_DISPLAY }, (_, index) => index);
 });
 
-export async function getRandomAdsBatch(
+export async function getAdsBatch(
   batchNumber: number, 
-  adsPerBatch: number
+  adsPerBatch: number = ADS_PER_BATCH 
 ): Promise<Ad[]> {
-  const randomizedIndices = getRandomizedIndices();
+  const sequentialIndices = getSequentialIndices();
   const startIndex = (batchNumber - 1) * adsPerBatch;
   const endIndex = Math.min(startIndex + adsPerBatch, MAXIMUM_ADS_TO_DISPLAY);
   
@@ -31,14 +24,17 @@ export async function getRandomAdsBatch(
     return [];
   }
   
-  const indicesForCurrentBatch = randomizedIndices.slice(startIndex, endIndex);
+  const indicesForCurrentBatch = sequentialIndices.slice(startIndex, endIndex);
   const adsForCurrentBatch = indicesForCurrentBatch.map(index => allAvailableAds[index]);
   
   return adsForCurrentBatch;
 }
 
-export function getRandomAds(limit: number, page: number = 1): GetRandomAdsReturn {
-  const randomizedIndices = getRandomizedIndices();
+export function getAds(
+  limit: number = ADS_PER_BATCH, 
+  page: number = 1
+): GetAdsReturn {
+  const sequentialIndices = getSequentialIndices();
   const startIndex = (page - 1) * limit;
   const endIndex = Math.min(startIndex + limit, MAXIMUM_ADS_TO_DISPLAY);
   
@@ -49,7 +45,7 @@ export function getRandomAds(limit: number, page: number = 1): GetRandomAdsRetur
     };
   }
   
-  const indicesForCurrentPage = randomizedIndices.slice(startIndex, endIndex);
+  const indicesForCurrentPage = sequentialIndices.slice(startIndex, endIndex);
   const adsForCurrentPage = indicesForCurrentPage.map(index => allAvailableAds[index]);
   const totalAdsLoadedSoFar = endIndex;
   
@@ -61,16 +57,18 @@ export function getRandomAds(limit: number, page: number = 1): GetRandomAdsRetur
 
 export async function hasMoreBatches(
   currentBatchNumber: number, 
-  adsPerBatch: number
+  adsPerBatch: number = ADS_PER_BATCH
 ): Promise<boolean> {
-  const totalBatches = Math.ceil(MAXIMUM_ADS_TO_DISPLAY / adsPerBatch);
-  return currentBatchNumber < totalBatches;
+  return currentBatchNumber < MAX_BATCHES;
 }
 
-export async function getTotalBatches(adsPerBatch: number): Promise<number> {
-  return Math.ceil(MAXIMUM_ADS_TO_DISPLAY / adsPerBatch);
+export async function getTotalBatches(adsPerBatch: number = ADS_PER_BATCH): Promise<number> {
+  return MAX_BATCHES;
 }
 
-export function getCurrentLoadedCount(batchNumber: number, adsPerBatch: number): number {
+export function getCurrentLoadedCount(
+  batchNumber: number, 
+  adsPerBatch: number = ADS_PER_BATCH
+): number {
   return Math.min(batchNumber * adsPerBatch, MAXIMUM_ADS_TO_DISPLAY);
 }

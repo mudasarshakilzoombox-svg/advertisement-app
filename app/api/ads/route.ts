@@ -1,33 +1,28 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getRandomAds } from "@/lib/ads.service";
-
-const ADS_PER_PAGE = 15;
-const MAXIMUM_ADS = 190;
+import { getAdsBatch, hasMoreBatches, MAXIMUM_ADS_TO_DISPLAY } from "@/lib/ads.service";
+import { ADS_PER_BATCH } from "@/config/ads.config";
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
   const pageNumber = parseInt(searchParams.get("page") || "1");
+  const adsPerBatch = parseInt(searchParams.get("limit") || String(ADS_PER_BATCH));
 
   try {
-    const { adsForCurrentPage, totalAdsLoadedSoFar } = getRandomAds(ADS_PER_PAGE, pageNumber);
-
-    const validAds = adsForCurrentPage.filter(ad => ad && ad.id);
-
-    const hasMoreAds = totalAdsLoadedSoFar < MAXIMUM_ADS && validAds.length > 0;
-
+    const ads = await getAdsBatch(pageNumber, adsPerBatch);
+    const hasMore = await hasMoreBatches(pageNumber, adsPerBatch);
+    const totalLoadedSoFar = pageNumber * adsPerBatch;
+    
     return NextResponse.json({
-      ads: validAds,
-      hasMore: hasMoreAds
+      ads,
+      hasMore: hasMore && totalLoadedSoFar < MAXIMUM_ADS_TO_DISPLAY,
+      nextPage: pageNumber + 1,
+      totalAds: MAXIMUM_ADS_TO_DISPLAY
     });
-
+    
   } catch (error) {
     console.error("Error in ads API:", error);
     return NextResponse.json(
-      {
-        ads: [],
-        hasMore: false,
-        errorMessage: "Failed to fetch ads"
-      },
+      { error: "Failed to fetch ads" },
       { status: 500 }
     );
   }

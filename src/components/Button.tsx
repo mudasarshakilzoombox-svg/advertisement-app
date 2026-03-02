@@ -1,12 +1,5 @@
 import Link from "next/link";
-import { ReactNode } from "react";
-
-type ButtonProps = {
-  children: ReactNode;
-  href?: string;
-  onClick?: () => void;
-  className?: string;
-};
+import type { ButtonProps } from "@/src/types/button";
 
 export default function Button({
   children,
@@ -15,7 +8,7 @@ export default function Button({
   className = "",
 }: ButtonProps) {
   const styles =
-    "inline-block px-8 py-4 text-lg font-semibold text-white bg-black/40 rounded-2xl shadow-lg backdrop-blur-md transition-all  hover:bg-black/60 hover:scale-105 " +
+    "inline-block px-8 py-4 text-lg font-semibold text-white bg-black/40 rounded-2xl shadow-lg backdrop-blur-md transition-all hover:bg-black/60 hover:scale-105 " +
     className;
 
   if (href) {

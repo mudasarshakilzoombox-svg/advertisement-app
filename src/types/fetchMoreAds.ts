@@ -1,4 +1,4 @@
-import type { Ad } from "@/types/ad";
+import type { Ad } from "@/src/types/ad";
 
 export type FetchMoreAdsParams = {
   batchNumber: number;

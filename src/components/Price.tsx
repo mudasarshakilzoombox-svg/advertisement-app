@@ -1,4 +1,4 @@
-import type { PriceProps } from "@/types/price";
+import type { PriceProps } from "@/src/types/price";
 import { formatPrice } from "@/utils/common/formatPrice";
 
 export default function Price({

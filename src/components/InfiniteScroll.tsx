@@ -2,8 +2,8 @@
 
 import AdsContainer from './AdsContainer';
 import StatusMessage from './StatusMessage';
-import { useAds } from '@/hooks/useAds';
-import { InfiniteScrollClientProps } from '@/types/components';
+import { useAds } from '@/src/hooks/useAds';
+import { InfiniteScrollClientProps } from '@/src/types/components';
 
 export default function InfiniteScrollClient(props: InfiniteScrollClientProps) {
   const {
@@ -21,12 +21,12 @@ export default function InfiniteScrollClient(props: InfiniteScrollClientProps) {
   return (
     <>
       {allAds.length > 0 && (
-        <div className="mt-8">
+        <div className="mt-5">
           <AdsContainer adsList={allAds} />
         </div>
       )}
 
-      <div className="mt-8">
+      <div className="mt-12">
         {hasMore && loadedCount < totalAdsCount && !isLoading && (
           <div ref={loadMoreRef}>
             <StatusMessage type="scroll" />
@@ -49,10 +49,12 @@ export default function InfiniteScrollClient(props: InfiniteScrollClientProps) {
         )}
         
         {!hasMore && !isLoading && loadedCount >= totalAdsCount && (
-          <StatusMessage 
-            type="end" 
-            total={totalAdsCount}
-          />
+          <div className="mt-8">
+            <StatusMessage 
+              type="end" 
+              total={totalAdsCount}
+            />
+          </div>
         )}
       </div>
     </>

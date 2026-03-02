@@ -1,4 +1,4 @@
-import { AdsState, AdsAction } from '@/types/ads-state';
+import { AdsState, AdsAction } from '@/src/types/ads-state';
 
 export const initialAdsState: AdsState = {
   allAds: [],

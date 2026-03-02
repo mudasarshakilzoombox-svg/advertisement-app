@@ -2,10 +2,10 @@
 
 import { useReducer, useCallback, useEffect, useRef } from 'react';
 import { useInView } from 'react-intersection-observer';
-import { fetchMoreAds } from '@/actions/ads';
+import { fetchMoreAds } from '@/src/actions/ads';
 import { adsReducer, initialAdsState } from '@/lib/ads-reducer';
-import { Ad } from '@/types/ad';
-import { UseAdsProps, UseAdsReturn } from '@/types/hooks';
+import { Ad } from '@/src/types/ad';
+import { UseAdsProps, UseAdsReturn } from '@/src/types/hooks';
 
 export function useAds({
   preFetchedNextBatch,
@@ -56,7 +56,7 @@ export function useAds({
     dispatch({ type: 'LOAD_MORE_START' });
 
     try {
-      const validNextAds = state.nextBatch.filter((ad): ad is Ad => 
+      const validNextAds = state.nextBatch.filter((ad: { id: any; }): ad is Ad => 
         Boolean(ad && ad.id)
       );
       

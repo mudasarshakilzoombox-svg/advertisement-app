@@ -1,4 +1,4 @@
-import { AdCardProps } from '@/types/components';
+import { AdCardProps } from '@/src/types/components';
 import Price from './Price';
 
 export default function AdCard({ adDetails }: AdCardProps) {
