@@ -17,7 +17,7 @@ export default function AdCard({ adDetails }: AdCardProps) {
       <div className="p-5">
 
         <div className="flex items-start justify-between gap-4">
-          <h2 className="text-xl font-semibold text-gray-900 group-hover:text-blue-600 transition-colors duration-300 leading-snug">
+          <h2 className="text-xl font-semibold text-gray-900 group-hover:text-indigo-600 transition-colors duration-300 leading-snug">
             {adDetails.title}
           </h2>
 

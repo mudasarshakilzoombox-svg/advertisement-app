@@ -1,5 +1,4 @@
 import { getAds } from "@/lib/ads.service";
-import AdsContainer from "@/src/components/AdsContainer";
 import InfiniteScrollClient from "@/src/components/InfiniteScroll";
 import { ADS_PER_BATCH, TOTAL_ADS_AVAILABLE } from "@/config/ads.config";
 
@@ -12,17 +11,12 @@ export default async function AdsPage() {
 
   return (
     <main className="bg-gray-100 min-h-screen">
-      <div className="max-w-6xl mx-auto px-6 md:px-10 lg:px-6 py-6">
-        
+      <div className="max-w-6xl mx-auto px-6 md:px-10 lg:px-6 py-6">  
         <div className="flex items-center justify-between mb-6">
           <h1 className="text-2xl font-bold text-gray-900">
             All Ads
           </h1>
-        
         </div>
-        
-        <AdsContainer adsList={firstBatchAds} />
-
         <InfiniteScrollClient 
           preFetchedNextBatch={secondBatchAds}
           nextBatchNumber={2}
@@ -30,7 +24,6 @@ export default async function AdsPage() {
           initialLoadedCount={firstBatchAds.length}
           adsPerBatch={ADS_PER_BATCH}
         />
-
       </div>
     </main>
   );

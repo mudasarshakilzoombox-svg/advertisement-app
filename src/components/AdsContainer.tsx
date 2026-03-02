@@ -1,15 +1,11 @@
-import type { Ad } from "@/src/types/ad";
 import AdCard from "./AdCard";
 import StatusMessage from "./StatusMessage";
+import type { AdsContainerProps } from "@/src/types/adProps";
+import type { Ad } from "@/src/types/ad";
 
-type Props = {
-  adsList: Ad[];
-  emptyMessage?: string;
-};
-
-export default function AdsContainer({ adsList, emptyMessage }: Props) {
+export default function AdsContainer({ adsList, emptyMessage }: AdsContainerProps) {
   const validAds = Array.isArray(adsList)
-    ? adsList.filter((ad) => ad && ad.id)
+    ? adsList.filter((ad): ad is Ad => ad && ad.id !== undefined)
     : [];
 
   if (validAds.length === 0) {

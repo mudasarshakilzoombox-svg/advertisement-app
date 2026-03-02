@@ -14,11 +14,8 @@ export function useAds({
   initialLoadedCount,
   adsPerBatch
 }: UseAdsProps): UseAdsReturn {
-  const [state, dispatch] = useReducer(adsReducer, {
-    ...initialAdsState,
-    loadedCount: initialLoadedCount,
-  });
-
+  const [state, dispatch] = useReducer(adsReducer, initialAdsState);
+  
   const isLoadingRef = useRef<boolean>(false);
   const hasMoreRef = useRef<boolean>(true);
   const { ref: loadMoreRef, inView } = useInView({
@@ -37,18 +34,17 @@ export function useAds({
     });
   }, [preFetchedNextBatch, nextBatchNumber, initialLoadedCount]);
 
-
   const loadMoreAds = useCallback(async (): Promise<void> => {
     if (isLoadingRef.current || !hasMoreRef.current || state.loadedCount >= totalAdsCount) {
       return;
     }
 
     if (!state.nextBatch.length) {
-      dispatch({
-        type: 'UPDATE_NEXT_BATCH',
-        payload: {
-          nextBatch: [],
-          nextBatchNumber: state.currentBatchNumber,
+      dispatch({ 
+        type: 'UPDATE_NEXT_BATCH', 
+        payload: { 
+          nextBatch: [], 
+          nextBatchNumber: state.currentBatchNumber, 
           hasMore: false
         }
       });
@@ -60,10 +56,10 @@ export function useAds({
     dispatch({ type: 'LOAD_MORE_START' });
 
     try {
-      const validNextAds = state.nextBatch.filter((ad: { id: any; }): ad is Ad =>
+      const validNextAds = state.nextBatch.filter((ad: { id: any; }): ad is Ad => 
         Boolean(ad && ad.id)
       );
-
+      
       if (state.loadedCount + validNextAds.length >= totalAdsCount) {
         dispatch({
           type: 'LOAD_MORE_SUCCESS',
@@ -71,7 +67,7 @@ export function useAds({
             newAds: validNextAds
           }
         });
-
+        
         dispatch({
           type: 'UPDATE_NEXT_BATCH',
           payload: {
@@ -80,7 +76,7 @@ export function useAds({
             hasMore: false
           }
         });
-
+        
         hasMoreRef.current = false;
         isLoadingRef.current = false;
         return;
@@ -94,7 +90,7 @@ export function useAds({
       });
 
       const result = await fetchMoreAds(state.currentBatchNumber, adsPerBatch);
-
+      
       dispatch({
         type: 'UPDATE_NEXT_BATCH',
         payload: {
@@ -103,9 +99,9 @@ export function useAds({
           hasMore: result.hasMore
         }
       });
-
+      
       hasMoreRef.current = result.hasMore;
-
+      
     } catch (error) {
       console.error('Error loading more ads:', error);
       dispatch({

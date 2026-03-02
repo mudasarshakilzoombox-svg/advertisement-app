@@ -1,5 +1,3 @@
-'use server';
-
 import { getAdsBatch, hasMoreBatches, MAXIMUM_ADS_TO_DISPLAY } from "@/lib/ads.service";
 import { FetchMoreAdsResponse } from "@/src/types/api";
 import { ADS_PER_BATCH } from "@/config/ads.config";
