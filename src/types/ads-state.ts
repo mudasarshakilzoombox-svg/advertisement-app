@@ -12,10 +12,11 @@ export type AdsState = {
 };
 
 export type AdsAction =
-  | { type: 'SET_INITIAL_STATE'; payload: { 
+  | { type: 'SET_INITIAL_STATE'; payload: {
+      initialAds: Ad[]; 
       nextBatch: Ad[]; 
       nextBatchNumber: number; 
-      initialLoadedCount: number 
+      initialLoadedCount: number;
     } 
   }
   | { type: 'LOAD_MORE_START' }
