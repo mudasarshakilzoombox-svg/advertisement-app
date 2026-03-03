@@ -1,7 +1,7 @@
 export const ADS_CONFIG = {
   PER_BATCH: 15,
-  TOTAL_ADS: 190,
-  MAX_BATCHES: Math.ceil(190 / 15) 
+  TOTAL_ADS: 195,
+  MAX_BATCHES: Math.ceil(195 / 15) 
 } as const;
 
 export const ADS_PER_BATCH = ADS_CONFIG.PER_BATCH;

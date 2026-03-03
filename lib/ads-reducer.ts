@@ -7,7 +7,7 @@ export const initialAdsState: AdsState = {
   loadedCount: 0,
   isLoading: false,
   hasMore: true,
-  error: null
+  error: null,
 };
 
 export function adsReducer(state: AdsState, action: AdsAction): AdsState {
@@ -15,42 +15,50 @@ export function adsReducer(state: AdsState, action: AdsAction): AdsState {
     case 'SET_INITIAL_STATE':
       return {
         ...state,
-        allAds: action.payload.initialAds, 
+        allAds: action.payload.initialAds,
         nextBatch: action.payload.nextBatch,
         currentBatchNumber: action.payload.nextBatchNumber,
         loadedCount: action.payload.initialLoadedCount,
-        hasMore: action.payload.nextBatch.length > 0
+        hasMore: action.payload.nextBatch.length > 0,
+        error: null,
       };
 
     case 'LOAD_MORE_START':
       return {
         ...state,
         isLoading: true,
-        error: null
+        error: null,
       };
 
-    case 'LOAD_MORE_SUCCESS':
+    case 'LOAD_MORE_SUCCESS': {
+      const existingIds = new Set(state.allAds.map(ad => ad.id));
+
+      const uniqueNewAds = action.payload.newAds.filter(
+        ad => !existingIds.has(ad.id)
+      );
+
       return {
         ...state,
-        allAds: [...state.allAds, ...action.payload.newAds],
-        loadedCount: state.loadedCount + action.payload.newAds.length,
+        allAds: [...state.allAds, ...uniqueNewAds],
+        loadedCount: state.loadedCount + uniqueNewAds.length,
         isLoading: false,
-        error: null
+        error: null,
       };
+    }
 
     case 'UPDATE_NEXT_BATCH':
       return {
         ...state,
         nextBatch: action.payload.nextBatch,
         currentBatchNumber: action.payload.nextBatchNumber,
-        hasMore: action.payload.hasMore
+        hasMore: action.payload.hasMore,
       };
 
     case 'LOAD_MORE_ERROR':
       return {
         ...state,
         isLoading: false,
-        error: action.payload.error
+        error: action.payload.error,
       };
 
     case 'RESET_STATE':

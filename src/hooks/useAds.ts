@@ -24,96 +24,84 @@ export function useAds({
     rootMargin: '200px'
   });
 
-    useEffect(() => {
-    dispatch({
-      type: 'SET_INITIAL_STATE',
-      payload: {
-        initialAds, 
-        nextBatch: preFetchedNextBatch,
-        nextBatchNumber,
-        initialLoadedCount
-      }
-    });
-  }, [initialAds, preFetchedNextBatch, nextBatchNumber, initialLoadedCount]);
+   useEffect(() => {
+  dispatch({
+    type: 'SET_INITIAL_STATE',
+    payload: {
+      initialAds,
+      nextBatch: preFetchedNextBatch,
+      nextBatchNumber,
+      initialLoadedCount,
+      totalAdsCount, 
+    }
+  });
+}, [
+  initialAds,
+  preFetchedNextBatch,
+  nextBatchNumber,
+  initialLoadedCount,
+  totalAdsCount
+]);
 
   const loadMoreAds = useCallback(async (): Promise<void> => {
-    if (isLoadingRef.current || !hasMoreRef.current || state.loadedCount >= totalAdsCount) {
-      return;
-    }
+  if (isLoadingRef.current || state.loadedCount >= totalAdsCount) {
+    return;
+  }
 
-    if (!state.nextBatch.length) {
-      dispatch({ 
-        type: 'UPDATE_NEXT_BATCH', 
-        payload: { 
-          nextBatch: [], 
-          nextBatchNumber: state.currentBatchNumber, 
-          hasMore: false
-        }
-      });
-      hasMoreRef.current = false;
-      return;
-    }
+  isLoadingRef.current = true;
+  dispatch({ type: 'LOAD_MORE_START' });
 
-    isLoadingRef.current = true;
-    dispatch({ type: 'LOAD_MORE_START' });
+  try {
+    const result = await fetchMoreAds(
+      state.currentBatchNumber,
+      adsPerBatch
+    );
 
-    try {
-      const validNextAds = state.nextBatch.filter((ad: { id: any; }): ad is Ad => 
-        Boolean(ad && ad.id)
-      );
-      
-      if (state.loadedCount + validNextAds.length >= totalAdsCount) {
-        dispatch({
-          type: 'LOAD_MORE_SUCCESS',
-          payload: {
-            newAds: validNextAds
-          }
-        });
-        
-        dispatch({
-          type: 'UPDATE_NEXT_BATCH',
-          payload: {
-            nextBatch: [],
-            nextBatchNumber: state.currentBatchNumber + 1,
-            hasMore: false
-          }
-        });
-        
-        hasMoreRef.current = false;
-        isLoadingRef.current = false;
-        return;
-      }
-
-      dispatch({
-        type: 'LOAD_MORE_SUCCESS',
-        payload: {
-          newAds: validNextAds
-        }
-      });
-
-      const result = await fetchMoreAds(state.currentBatchNumber, adsPerBatch);
-      
+    if (!result.ads.length) {
       dispatch({
         type: 'UPDATE_NEXT_BATCH',
         payload: {
-          nextBatch: result.ads,
-          nextBatchNumber: result.nextBatchNumber,
-          hasMore: result.hasMore
+          nextBatch: [],
+          nextBatchNumber: state.currentBatchNumber,
+          hasMore: false
         }
       });
-      
-      hasMoreRef.current = result.hasMore;
-      
-    } catch (error) {
-      console.error('Error loading more ads:', error);
-      dispatch({
-        type: 'LOAD_MORE_ERROR',
-        payload: { error: 'Failed to load more ads. Please try again.' }
-      });
-    } finally {
-      isLoadingRef.current = false;
+
+      return;
     }
-  }, [state.nextBatch, state.loadedCount, state.currentBatchNumber, totalAdsCount, adsPerBatch]);
+
+    dispatch({
+      type: 'LOAD_MORE_SUCCESS',
+      payload: {
+        newAds: result.ads
+      }
+    });
+
+    dispatch({
+      type: 'UPDATE_NEXT_BATCH',
+      payload: {
+        nextBatch: [],
+        nextBatchNumber: result.nextBatchNumber,
+        hasMore: state.loadedCount + result.ads.length < totalAdsCount
+      }
+    });
+
+  } catch {
+    dispatch({
+      type: 'LOAD_MORE_ERROR',
+      payload: {
+        error: 'Failed to load more ads. Please try again.'
+      }
+    });
+  } finally {
+    isLoadingRef.current = false;
+  }
+}, [
+  state.loadedCount,
+  state.currentBatchNumber,
+  totalAdsCount,
+  adsPerBatch
+]);
 
   useEffect(() => {
     if (inView && !state.isLoading && state.hasMore && state.loadedCount < totalAdsCount) {

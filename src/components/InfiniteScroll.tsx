@@ -18,19 +18,25 @@ export default function InfiniteScrollClient(props: InfiniteScrollClientProps) {
 
   const { totalAdsCount } = props;
 
+  const showEndMessage = !hasMore && !isLoading && loadedCount >= totalAdsCount && totalAdsCount > 0;
+  const showScrollTrigger = hasMore && loadedCount < totalAdsCount && !isLoading;
+  const showLoadingSpinner = isLoading;
+  const showError = error;
+
   return (
     <>
-    <div className='mt-5'>
-      <AdsContainer adsList={allAds} />
-    </div>
+      <div className='mt-5'>
+        <AdsContainer adsList={allAds} />
+      </div>
+      
       <div className="mt-12">
-        {hasMore && loadedCount < totalAdsCount && !isLoading && (
-          <div ref={loadMoreRef}>
+        {showScrollTrigger && (
+          <div ref={loadMoreRef} className="h-10">
             <StatusMessage type="scroll" />
           </div>
         )}
         
-        {isLoading && (
+        {showLoadingSpinner && (
           <StatusMessage 
             type="loading" 
             count={loadedCount} 
@@ -38,14 +44,14 @@ export default function InfiniteScrollClient(props: InfiniteScrollClientProps) {
           />
         )}
         
-        {error && (
+        {showError && (
           <StatusMessage 
             type="error" 
             onRetry={retry}
           />
         )}
         
-        {!hasMore && !isLoading && loadedCount >= totalAdsCount && (
+        {showEndMessage && (
           <div className="mt-8">
             <StatusMessage 
               type="end" 
@@ -53,6 +59,7 @@ export default function InfiniteScrollClient(props: InfiniteScrollClientProps) {
             />
           </div>
         )}
+        
       </div>
     </>
   );

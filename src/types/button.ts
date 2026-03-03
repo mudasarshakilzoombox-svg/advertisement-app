@@ -1,8 +1,20 @@
-import type { ReactNode } from "react";
+import type { ReactNode, ButtonHTMLAttributes } from "react";
+import type { UrlObject } from "url";
 
-export type ButtonProps = {
+type BaseProps = {
   children: ReactNode;
-  href?: string;
-  onClick?: () => void;
   className?: string;
 };
+
+type ButtonAsButton = BaseProps &
+  Omit<ButtonHTMLAttributes<HTMLButtonElement>, "type"> & {
+    href?: never;
+    type?: "button" | "submit" | "reset";
+  };
+
+type ButtonAsLink = BaseProps & {
+  href: string | UrlObject;
+  onClick?: never;
+} & Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, "href">;
+
+export type ButtonProps = ButtonAsButton | ButtonAsLink;

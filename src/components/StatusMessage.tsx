@@ -1,27 +1,27 @@
-import { StatusMessageProps } from '@/src/types/status';
+import Button from "@/src/components/Button";
+import { StatusMessageProps } from "@/src/types/status";
 
-export default function StatusMessage({ 
-  type, 
+export default function StatusMessage({
+  type,
   message,
-  count, 
-  total, 
-  onRetry 
+  count,
+  total,
+  onRetry,
 }: StatusMessageProps) {
-  
-  if (type === 'scroll') {
+  if (type === "scroll") {
     return (
       <div className="h-16 flex items-center justify-center">
         <span className="text-gray-600 text-sm animate-pulse">
-          {message || 'Loading more ads...'}
+          {message || "Loading more ads..."}
         </span>
       </div>
     );
   }
 
-  if (type === 'loading') {
+  if (type === "loading") {
     return (
       <div className="flex flex-col items-center justify-center py-10">
-        <div className="animate-spin rounded-full h-8 w-8 border-3 border-indigo-200 border-t-indigo-600 mb-3"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-4 border-indigo-200 border-t-indigo-600 mb-3" />
         <p className="text-gray-600 text-sm">
           {message || `Loading... ${count} of ${total}`}
         </p>
@@ -29,36 +29,54 @@ export default function StatusMessage({
     );
   }
 
-  if (type === 'error') {
+  if (type === "error") {
     return (
       <div className="text-center py-10">
         <div className="bg-red-50 rounded-xl p-6 inline-block">
-          <svg className="w-10 h-10 text-red-500 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-          </svg>
-          <p className="text-red-600 mb-3">{message || 'Failed to load ads'}</p>
-          <button
-            onClick={onRetry}
-            className="px-4 py-2 bg-red-600 text-white text-sm rounded-lg hover:bg-red-700"
+          <svg
+            className="w-10 h-10 text-red-500 mx-auto mb-3"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
           >
-            Try Again
-          </button>
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+            />
+          </svg>
+
+          <p className="text-red-600 mb-3">
+            {message || "Failed to load ads"}
+          </p>
+
+          {onRetry && (
+            <Button
+              onClick={onRetry}
+              className="px-4 py-2 text-sm bg-red-600 hover:bg-red-700 rounded-lg"
+            >
+              Try Again
+            </Button>
+          )}
         </div>
       </div>
     );
   }
 
-  if (type === 'empty') {
+  if (type === "empty") {
     return (
       <div className="text-center py-12">
-        <p className="text-gray-500">{message || 'No ads found'}</p>
+        <p className="text-gray-500">
+          {message || "No ads found"}
+        </p>
       </div>
     );
   }
 
   return (
     <p className="text-gray-700 text-center py-4">
-      {message || 'No more ads'}
+      {message || "No more ads"}
     </p>
   );
 }

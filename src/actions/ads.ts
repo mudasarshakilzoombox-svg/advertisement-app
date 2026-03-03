@@ -8,13 +8,25 @@ export async function fetchMoreAds(
 ): Promise<FetchMoreAdsResponse> {
   try {
     const nextBatchAds = await getAdsBatch(batchNumber, adsPerBatch);
+    
+    const validAds = (nextBatchAds || []).filter(ad => ad && ad.id);
+    
+    if (nextBatchAds && nextBatchAds.length !== validAds.length) {
+      console.warn(`Filtered out ${nextBatchAds.length - validAds.length} ads without IDs`);
+    }
+    
+    const adsWithStringIds = validAds.map(ad => ({
+      ...ad,
+      id: String(ad.id)
+    }));
+    
     const moreAvailable = await hasMoreBatches(batchNumber, adsPerBatch);
     const totalLoadedSoFar = batchNumber * adsPerBatch;
     
-    const hasMore = moreAvailable && nextBatchAds.length > 0 && totalLoadedSoFar < MAXIMUM_ADS_TO_DISPLAY;
+    const hasMore = moreAvailable && adsWithStringIds.length > 0 && totalLoadedSoFar < MAXIMUM_ADS_TO_DISPLAY;
     
     return {
-      ads: nextBatchAds,
+      ads: adsWithStringIds,
       nextBatchNumber: batchNumber + 1,
       hasMore: hasMore
     };

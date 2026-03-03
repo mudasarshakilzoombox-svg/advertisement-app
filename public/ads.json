@@ -1518,5 +1518,45 @@
     "price": 1550000,
     "condition": "New",
     "image": "https://picsum.photos/600/400?190"
+  },
+  {
+    "id": "191",
+    "title": "Camera Item",
+    "location": "Lahore, Pakistan",
+    "price": 185000,
+    "condition": "Used",
+    "image": "https://picsum.photos/600/400?180"
+  },
+  {
+    "id": "192",
+    "title": "Car Item",
+    "location": "Karachi, Pakistan",
+    "price": 5250000,
+    "condition": "Like New",
+    "image": "https://picsum.photos/600/400?181"
+  },
+  {
+    "id": "193",
+    "title": "Mobile Phone Item",
+    "location": "Rawalpindi, Pakistan",
+    "price": 95000,
+    "condition": "New",
+    "image": "https://picsum.photos/600/400?182"
+  },
+  {
+    "id": "194",
+    "title": "Property Item",
+    "location": "Multan, Pakistan",
+    "price": 4550000,
+    "condition": "Used",
+    "image": "https://picsum.photos/600/400?183"
+  },
+  {
+    "id": "195",
+    "title": "Laptop Item",
+    "location": "Faisalabad, Pakistan",
+    "price": 195000,
+    "condition": "New",
+    "image": "https://picsum.photos/600/400?184"
   }
 ]
