@@ -1,12 +1,13 @@
 import { Ad } from './ad';
 
-export type InfiniteScrollClientProps = {
+export interface InfiniteScrollClientProps {
+  initialAds: Ad[]; 
   preFetchedNextBatch: Ad[];
   nextBatchNumber: number;
   totalAdsCount: number;
   initialLoadedCount: number;
   adsPerBatch: number;
-};
+}
 
 export type AdsContainerProps = {
   adsList: Ad[];

@@ -8,6 +8,7 @@ import { Ad } from '@/src/types/ad';
 import { UseAdsProps, UseAdsReturn } from '@/src/types/hooks';
 
 export function useAds({
+  initialAds, 
   preFetchedNextBatch,
   nextBatchNumber,
   totalAdsCount,
@@ -23,16 +24,17 @@ export function useAds({
     rootMargin: '200px'
   });
 
-  useEffect(() => {
+    useEffect(() => {
     dispatch({
       type: 'SET_INITIAL_STATE',
       payload: {
+        initialAds, 
         nextBatch: preFetchedNextBatch,
         nextBatchNumber,
         initialLoadedCount
       }
     });
-  }, [preFetchedNextBatch, nextBatchNumber, initialLoadedCount]);
+  }, [initialAds, preFetchedNextBatch, nextBatchNumber, initialLoadedCount]);
 
   const loadMoreAds = useCallback(async (): Promise<void> => {
     if (isLoadingRef.current || !hasMoreRef.current || state.loadedCount >= totalAdsCount) {

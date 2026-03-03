@@ -1,12 +1,13 @@
 import { Ad } from './ad';
 
-export type UseAdsProps = {
+export interface UseAdsProps {
+  initialAds: Ad[]; 
   preFetchedNextBatch: Ad[];
   nextBatchNumber: number;
   totalAdsCount: number;
   initialLoadedCount: number;
   adsPerBatch: number;
-};
+}
 
 export type UseAdsReturn = {
   allAds: Ad[];

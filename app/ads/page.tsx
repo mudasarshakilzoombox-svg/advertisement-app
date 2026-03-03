@@ -18,6 +18,7 @@ export default async function AdsPage() {
           </h1>
         </div>
         <InfiniteScrollClient 
+          initialAds={firstBatchAds}
           preFetchedNextBatch={secondBatchAds}
           nextBatchNumber={2}
           totalAdsCount={TOTAL_ADS_AVAILABLE}

@@ -15,9 +15,11 @@ export function adsReducer(state: AdsState, action: AdsAction): AdsState {
     case 'SET_INITIAL_STATE':
       return {
         ...state,
+        allAds: action.payload.initialAds, 
         nextBatch: action.payload.nextBatch,
         currentBatchNumber: action.payload.nextBatchNumber,
-        loadedCount: action.payload.initialLoadedCount
+        loadedCount: action.payload.initialLoadedCount,
+        hasMore: action.payload.nextBatch.length > 0
       };
 
     case 'LOAD_MORE_START':
