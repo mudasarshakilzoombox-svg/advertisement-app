@@ -2,9 +2,6 @@ import { getAds } from "@/lib/ads.service";
 import InfiniteScrollClient from "@/src/components/InfiniteScroll";
 import { ADS_PER_BATCH, TOTAL_ADS_AVAILABLE } from "@/config/ads.config";
 
-export const dynamic = "force-dynamic";
-export const revalidate = 0;
-
 export default async function AdsPage() {
   const { adsForCurrentPage: firstBatchAds } = getAds(ADS_PER_BATCH, 1);
   const { adsForCurrentPage: secondBatchAds } = getAds(ADS_PER_BATCH, 2);
